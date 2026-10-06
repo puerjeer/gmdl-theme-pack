@@ -30,3 +30,18 @@
 - 本包所有文件为原创，MIT 协议。
 - 上游项目 go-music-dl 为 AGPL-3.0，本包不包含、不修改其任何代码，仅在网络层叠加样式与脚本。
 - 插件/歌词/下载产生的数据与版权与本包无关，请合法合规使用。
+
+## 命令行下歌（cli-anything-go-music-dl 集成）
+
+音乐站后端同时接了 [cli-anything-go-music-dl](https://github.com/star-stae10/cli-anything-go-music-dl)（Agent 命令行封装），VPS 上已装好并指向本地后端：
+
+```bash
+gmdl server                                   # 探测后端
+gmdl search "晴天 周杰伦" --limit 10          # 聚合搜索（不知音源别传 --sources）
+gmdl --json inspect <ID> <音源>               # 探测直链有效性，valid 再下
+gmdl download --id <ID> --source <SRC> --name "歌名" --artist "歌手" --stream
+```
+
+- `gmdl` 是包好的快捷入口（`/usr/local/bin/gmdl`），自动带 `--server http://127.0.0.1:9981`，用法与原 CLI 一致
+- 下载目录已记住为曲库目录（Navidrome/Alist 同目录），`--stream` 落盘即入库
+- skill 已装到 `~/.config/opencode/skills/go-music-dl-cli/`，AI 对话提到下歌会自动加载
