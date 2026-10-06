@@ -1,0 +1,442 @@
+/* MusicDL dark theme v1 — enabled when <html> has class "dark" */
+html.dark {
+  --primary-color: #34d399;
+  --primary-gradient: linear-gradient(135deg, #34d399 0%, #059669 100%);
+  --bg-color: #0d1117;
+  --card-bg: #161d27;
+  --text-main: #e6edf3;
+  --text-sub: #9aa7b8;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.35);
+  --shadow-active: 0 10px 15px -3px rgba(52, 211, 153, 0.25);
+  --error-color: #f87171;
+  --btn-switch-bg: #3a2b1a;
+  --btn-switch-text: #fbbf24;
+  --btn-switch-border: #92600a;
+  --btn-dl-bg: #12283a;
+  --btn-dl-text: #7cc4ff;
+  --btn-dl-border: #1e4a73;
+  --btn-warn-bg: #3a1d1d;
+  --btn-warn-text: #f87171;
+  --btn-warn-border: #7f2d2d;
+  --karaoke-base-color: #9aa7b8;
+  --karaoke-progress: #34d399;
+  color-scheme: dark;
+}
+html.dark body {
+  background-color: #0d1117;
+  background-image:
+    radial-gradient(at 0% 0%, hsla(160, 60%, 12%, 1) 0, transparent 50%),
+    radial-gradient(at 50% 0%, hsla(220, 40%, 16%, 1) 0, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(330, 45%, 14%, 1) 0, transparent 50%);
+  color: var(--text-main);
+}
+/* cards & panels */
+html.dark .song-card,
+html.dark .playlist-card,
+html.dark .batch-toolbar,
+html.dark .source-card,
+html.dark .settings-modal,
+html.dark .app-update-modal,
+html.dark .download-records-table,
+html.dark .category-panel,
+html.dark .local-music-upload-button,
+html.dark .song-list-tool-action,
+html.dark .song-list-sort-direction,
+html.dark .btn-pill-switch {
+  background-color: var(--card-bg);
+  border-color: #2a3444;
+  color: var(--text-main);
+}
+html.dark .source-checkbox:disabled + .source-card {
+  background: #141a24;
+  border-color: #2a3444;
+}
+/* inputs */
+html.dark input[type="text"],
+html.dark input[type="password"],
+html.dark input[type="number"],
+html.dark select,
+html.dark textarea,
+html.dark .cookie-item select,
+html.dark .search-input {
+  background: #0f1620;
+  border-color: #2a3444;
+  color: var(--text-main);
+}
+html.dark input::placeholder { color: #5b6b7f; }
+/* muted text / borders */
+html.dark .tag { background: #222d3d; color: #9aa7b8; }
+html.dark .source-header,
+html.dark .settings-section,
+html.dark .modal-row { border-color: #2a3444; }
+html.dark .source-desc,
+html.dark .external-link-icon,
+html.dark .playlist-count,
+html.dark .category-current-sep { color: #7d8b9f; }
+/* pink/red soft buttons */
+html.dark .btn-fav,
+html.dark .btn-delete-local,
+html.dark .tag-local,
+html.dark .category-source-empty.error { background: #3a1d1d; border-color: #7f2d2d; color: #f87171; }
+html.dark .song-list-tool-action.is-warning { border-color: #92600a; background: #3a2b1a; color: #fbbf24; }
+html.dark .song-list-tool-action.is-active { border-color: #9f1239; background: #3a1620; color: #fb7185; }
+html.dark .btn-pill-switch:hover:not(:disabled) { border-color: #f97316; background: #3a2b1a; }
+html.dark .local-music-upload-button.is-folder { background: #0f2c22; color: #34d399; border-color: #14532d; }
+html.dark .btn-dl { background: #12283a; color: #7cc4ff; border-color: #1e4a73; }
+html.dark .settings-tab.is-active { background: #0f2c22; color: #34d399; }
+html.dark #auth-float-form.auth-logout button { background: #3a1620; color: #fb7185; border-color: rgba(251, 113, 133, 0.35); }
+/* dropdowns / popovers / tooltips */
+html.dark .dropdown-menu,
+html.dark .popover,
+html.dark .tooltip,
+html.dark .context-menu {
+  background: #1c2534;
+  border-color: #2a3444;
+  color: var(--text-main);
+}
+/* APlayer (fixed bottom player) */
+html.dark .aplayer { background: #161d27; color: var(--text-main); }
+html.dark .aplayer .aplayer-info { border-color: #2a3444; }
+html.dark .aplayer .aplayer-lrc p { color: #7d8b9f; }
+html.dark .aplayer .aplayer-lrc p.aplayer-lrc-current { color: #34d399; }
+html.dark .aplayer .aplayer-list ol li { border-color: #2a3444; }
+html.dark .aplayer .aplayer-list ol li:hover { background: #1e2837; }
+/* karaoke lyrics */
+html.dark .karaoke-word-base { color: #7d8b9f; }
+/* code / pre */
+html.dark pre, html.dark code { background: #0f1620; color: #c9d4e3; border-color: #2a3444; }
+/* scrollbars */
+html.dark ::-webkit-scrollbar { width: 10px; height: 10px; }
+html.dark ::-webkit-scrollbar-thumb { background: #2a3444; border-radius: 6px; }
+html.dark ::-webkit-scrollbar-track { background: transparent; }
+/* theme toggle button */
+#gmdl-theme-toggle {
+  position: fixed; right: 16px; bottom: 96px; z-index: 12000;
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid #2a3444; background: #161d27; color: #fbbf24;
+  font-size: 20px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,.4);
+}
+#gmdl-theme-toggle:hover { transform: scale(1.06); }
+/* ---- top area fixes v2 ---- */
+html.dark .search-box,
+html.dark .source-card,
+html.dark .list-header,
+html.dark .song-list-tools-popover {
+  background-color: var(--card-bg);
+  border-color: #2a3444;
+}
+html.dark .source-selector { background: rgba(22, 29, 39, 0.9); border-color: #2a3444; }
+html.dark .source-name { color: var(--text-main); }
+html.dark .rt-btn { background: #1c2534; color: var(--text-sub); box-shadow: 0 2px 8px rgba(0,0,0,.4); }
+html.dark .rt-btn:hover { color: var(--primary-color); }
+html.dark input[type="text"],
+html.dark input[type="password"] { background: #0f1620; }
+html.dark input[type="text"]:focus,
+html.dark input[type="password"]:focus { background: #0f1620; }
+html.dark .error-msg { background: #3a1d1d; border-color: #7f2d2d; color: #f87171; }
+html.dark .song-list-tool-field { border-color: #2a3444; color: var(--text-sub); }
+html.dark .song-list-tool-field select { background: #0f1620; border-color: #2a3444; color: var(--text-main); }
+html.dark .song-list-tool-actions { border-color: #2a3444; }
+html.dark .song-list-tools-heading { color: var(--text-main); }
+html.dark .song-list-sort-direction:hover { background: #0f2c22; }
+html.dark .type-option input { accent-color: var(--primary-color); }
+/* ---- personalization panel ---- */
+#gmdl-ui-btn {
+  position: fixed; right: 16px; bottom: 96px; z-index: 12000;
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid #d8dee6; background: #ffffff; color: #b7791f;
+  font-size: 20px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,.18);
+}
+html.dark #gmdl-ui-btn { border-color: #2a3444; background: #161d27; color: #fbbf24; box-shadow: 0 4px 12px rgba(0,0,0,.4); }
+#gmdl-ui-btn:hover { transform: scale(1.06); }
+#gmdl-ui-panel {
+  position: fixed; right: 68px; bottom: 96px; z-index: 12001;
+  width: 250px; padding: 14px 14px 10px; border-radius: 14px;
+  background: var(--card-bg, #fff); color: var(--text-main, #2d3748);
+  border: 1px solid #d8dee6; box-shadow: 0 12px 32px rgba(0,0,0,.2);
+  font-size: 13px;
+}
+html.dark #gmdl-ui-panel { border-color: #2a3444; box-shadow: 0 12px 32px rgba(0,0,0,.5); }
+#gmdl-ui-panel h4 { margin: 0 0 10px; font-size: 14px; }
+.gmdl-ui-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+.gmdl-ui-label { font-weight: 700; white-space: nowrap; }
+.gmdl-ui-seg { display: flex; gap: 4px; }
+.gmdl-ui-segbtn {
+  border: 1px solid #d8dee6; background: transparent; color: inherit;
+  border-radius: 8px; padding: 4px 10px; font-size: 12px; cursor: pointer;
+}
+html.dark .gmdl-ui-segbtn { border-color: #2a3444; }
+.gmdl-ui-segbtn.on { border-color: var(--primary-color); color: var(--primary-color); font-weight: 700; }
+.gmdl-ui-swatches { display: flex; gap: 6px; }
+.gmdl-ui-sw {
+  width: 24px; height: 24px; border-radius: 50%; cursor: pointer;
+  border: 2px solid transparent; padding: 0;
+}
+.gmdl-ui-sw.on { border-color: var(--primary-color); transform: scale(1.15); }
+.gmdl-ui-foot { font-size: 11px; opacity: .6; text-align: right; }
+/* retire old sun/moon quick toggle glyph (panel button reuses the slot) */
+#gmdl-theme-toggle { display: none; }
+/* ---- glassmorphism style (html.dark.glass) ---- */
+html.dark.glass body {
+  background-color: #0b1020;
+  background-image:
+    radial-gradient(at 15% 10%, hsla(160, 70%, 22%, 0.55) 0, transparent 45%),
+    radial-gradient(at 85% 15%, hsla(220, 80%, 30%, 0.55) 0, transparent 45%),
+    radial-gradient(at 50% 100%, hsla(300, 60%, 22%, 0.5) 0, transparent 55%),
+    radial-gradient(at 80% 80%, hsla(190, 80%, 20%, 0.4) 0, transparent 50%);
+  background-attachment: fixed;
+}
+html.dark.glass .search-box,
+html.dark.glass .song-card,
+html.dark.glass .playlist-card,
+html.dark.glass .source-card,
+html.dark.glass .list-header,
+html.dark.glass .batch-toolbar,
+html.dark.glass .settings-modal,
+html.dark.glass .app-update-modal,
+html.dark.glass .song-list-tools-popover,
+html.dark.glass .source-selector,
+html.dark.glass .download-records-table {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03));
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+html.dark.glass input[type="text"],
+html.dark.glass input[type="password"],
+html.dark.glass input[type="number"],
+html.dark.glass select,
+html.dark.glass textarea {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+html.dark.glass .rt-btn {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+html.dark.glass .aplayer {
+  background: rgba(20, 26, 38, 0.72);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+html.dark.glass .tag { background: rgba(255, 255, 255, 0.08); }
+html.dark.glass #gmdl-ui-panel {
+  background: rgba(22, 29, 39, 0.78);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+/* ---- settings switches & text coverage v3 ---- */
+html.dark .setting-switch { background: #3a4556; }
+html.dark .setting-switch::before { background: #e6edf3; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); }
+html.dark .setting-toggle input[type="checkbox"]:checked + .setting-switch { background: var(--primary-color); }
+html.dark .setting-hint { color: #7d8b9f; }
+html.dark .update-settings-panel { border-color: #2a3444; background: var(--card-bg); }
+html.dark .cookie-item { border-color: #2a3444; }
+html.dark .setting-link-row { background: var(--card-bg); border-color: #2a3444; color: var(--text-main); }
+html.dark .setting-link-desc { color: var(--text-sub); }
+html.dark .setting-link-chevron { color: var(--text-sub); }
+html.dark h2, html.dark h3, html.dark .song-title-link { color: var(--text-main); }
+html.dark .page-summary, html.dark .result-count { color: var(--text-sub); }
+/* ---- playback + lyrics glass v4 ---- */
+html.dark { background: #0d1117; }
+/* karaoke stroke follows accent (var), readable on dark */
+html.dark .karaoke-orig {
+  color: #ffffff;
+  text-shadow:
+    -1px -1px 0 var(--primary-color), 1px -1px 0 var(--primary-color),
+    -1px 1px 0 var(--primary-color), 1px 1px 0 var(--primary-color),
+    0px -1px 0 var(--primary-color), 0px 1px 0 var(--primary-color),
+    -1px 0px 0 var(--primary-color), 1px 0px 0 var(--primary-color);
+}
+html.dark .karaoke-word-base {
+  color: #ffffff;
+  text-shadow:
+    -2px -2px 0 var(--primary-color), 0px -2px 0 var(--primary-color), 2px -2px 0 var(--primary-color),
+    2px 0px 0 var(--primary-color), 2px 2px 0 var(--primary-color), 0px 2px 0 var(--primary-color),
+    -2px 2px 0 var(--primary-color), -2px 0px 0 var(--primary-color),
+    -1px -1px 0 var(--primary-color), 1px -1px 0 var(--primary-color),
+    -1px 1px 0 var(--primary-color), 1px 1px 0 var(--primary-color),
+    0px 3px 0 var(--primary-color), 0px -3px 0 var(--primary-color),
+    3px 0px 0 var(--primary-color), -3px 0px 0 var(--primary-color);
+}
+html.dark .karaoke-word-fill {
+  color: var(--primary-color);
+  text-shadow:
+    -2px -2px 0 #ffffff, 0px -2px 0 #ffffff, 2px -2px 0 #ffffff,
+    2px 0px 0 #ffffff, 2px 2px 0 #ffffff, 0px 2px 0 #ffffff,
+    -2px 2px 0 #ffffff, -2px 0px 0 #ffffff,
+    -1px -1px 0 #ffffff, 1px -1px 0 #ffffff,
+    -1px 1px 0 #ffffff, 1px 1px 0 #ffffff,
+    0px 3px 0 #ffffff, 0px -3px 0 #ffffff,
+    3px 0px 0 #ffffff, -3px 0px 0 #ffffff;
+}
+/* lyric sizes */
+html.lyr-small .karaoke-orig { font-size: 19px; }
+html.lyr-big .karaoke-orig { font-size: 31px; }
+html.lyr-small .aplayer .aplayer-lrc p { font-size: 13px; }
+html.lyr-big .aplayer .aplayer-lrc p { font-size: 19px; }
+html.lyr-big .aplayer .aplayer-lrc p.aplayer-lrc-current { font-size: 22px; }
+/* lyric glow */
+html.lyr-glow .karaoke-group.active { filter: drop-shadow(0 0 14px var(--primary-color)); }
+html.lyr-glow .aplayer .aplayer-lrc p.aplayer-lrc-current { text-shadow: 0 0 14px var(--primary-color); }
+/* glass lyric panel */
+html.dark .karaoke-lyrics[data-fallback="true"],
+html.dark body.karaoke-lyrics-active .aplayer.aplayer-fixed .aplayer-lrc {
+  background: linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04));
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+/* player progress + controls follow accent */
+html.dark .aplayer .aplayer-bar-wrap .aplayer-bar { background: #2a3444; }
+html.dark .aplayer .aplayer-bar-wrap .aplayer-bar .aplayer-loaded { background: #46536a; }
+html.dark .aplayer .aplayer-bar-wrap .aplayer-bar .aplayer-played { background: var(--primary-color); }
+html.dark .aplayer .aplayer-bar-wrap .aplayer-bar .aplayer-played .aplayer-thumb { background: var(--primary-color); border-color: #fff; }
+html.dark .aplayer .aplayer-info .aplayer-controller .aplayer-time { color: var(--text-sub); }
+html.dark .aplayer .aplayer-info .aplayer-music .aplayer-title { color: var(--text-main); }
+html.dark .aplayer .aplayer-info .aplayer-music .aplayer-author { color: var(--text-sub); }
+html.dark .aplayer .aplayer-list ol li .aplayer-list-title { color: var(--text-main); }
+html.dark .aplayer .aplayer-list ol li .aplayer-list-author { color: var(--text-sub); }
+html.dark .aplayer .aplayer-list ol li:hover { background: rgba(255,255,255,0.05); }
+html.dark .aplayer .aplayer-list ol li.aplayer-list-light { background: rgba(255,255,255,0.06); }
+html.dark .aplayer .aplayer-list ol li.aplayer-list-light .aplayer-list-cur { background-color: var(--primary-color) !important; }
+html.dark .aplayer .aplayer-volume-bar { background: #2a3444; }
+html.dark .aplayer .aplayer-volume-bar .aplayer-volume { background: var(--primary-color); }
+/* ---- panel scroll for many rows ---- */
+#gmdl-ui-panel { max-height: min(70vh, 560px); overflow-y: auto; }
+#gmdl-ui-panel input[type="range"] { accent-color: var(--primary-color); }
+/* ---- settings rows v5 ---- */
+html.dark .settings-tabs { background: #141b26; border-color: #2a3444; }
+html.dark .settings-tab { color: var(--text-sub); }
+html.dark .settings-tab:hover { background: #0f2c22; color: var(--primary-color); }
+html.dark .settings-tab.is-active { background: #1c2534; color: var(--primary-color); box-shadow: 0 2px 8px rgba(0,0,0,.4); }
+html.dark .setting-item { background: #141b26; border-color: #2a3444; }
+html.dark .setting-link-row:hover { background: #1a2331; border-color: #2a3444; }
+html.dark .setting-link-icon { background: #0f2c22; color: var(--primary-color); }
+html.dark .cookie-item label { color: var(--text-sub); }
+html.dark .cookie-item input { background: #0f1620; border-color: #2a3444; color: var(--text-main); }
+html.dark .cookie-item input:focus { border-color: var(--primary-color); }
+html.dark .cookie-qr-btn { background: var(--primary-gradient); color: #fff; }
+/* ---- glass intensity vars ---- */
+html.dark.glass .search-box,
+html.dark.glass .song-card,
+html.dark.glass .playlist-card,
+html.dark.glass .source-card,
+html.dark.glass .list-header,
+html.dark.glass .batch-toolbar,
+html.dark.glass .settings-modal,
+html.dark.glass .app-update-modal,
+html.dark.glass .song-list-tools-popover,
+html.dark.glass .source-selector,
+html.dark.glass .download-records-table {
+  background: linear-gradient(135deg, rgba(255,255,255,var(--glass-a,0.09)), rgba(255,255,255,calc(var(--glass-a,0.09)*0.35)));
+  backdrop-filter: blur(var(--glass-b,18px)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-b,18px)) saturate(160%);
+}
+html.dark.glass .karaoke-lyrics[data-fallback="true"],
+html.dark.glass body.karaoke-lyrics-active .aplayer.aplayer-fixed .aplayer-lrc {
+  backdrop-filter: blur(var(--glass-b,18px)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-b,18px)) saturate(160%);
+}
+/* ---- roma/trans follow accent + sizes ---- */
+html.dark .karaoke-trans, html.dark .karaoke-roma {
+  color: #ffffff;
+  text-shadow:
+    -1px -1px 0 var(--primary-color), 1px -1px 0 var(--primary-color),
+    -1px 1px 0 var(--primary-color), 1px 1px 0 var(--primary-color),
+    0px -1px 0 var(--primary-color), 0px 1px 0 var(--primary-color),
+    -1px 0px 0 var(--primary-color), 1px 0px 0 var(--primary-color);
+}
+html.lyr-small .karaoke-trans { font-size: 14px; }
+html.lyr-big .karaoke-trans { font-size: 21px; }
+html.lyr-small .karaoke-roma { font-size: 12px; }
+html.lyr-big .karaoke-roma { font-size: 17px; }
+/* ---- lyric live preview in panel ---- */
+#gmdl-lyric-preview {
+  margin: 2px 0 10px; padding: 10px 8px; border-radius: 10px;
+  background: rgba(0, 0, 0, 0.30);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  text-align: center; font-size: 24px; font-weight: 800; color: #ffffff;
+  text-shadow:
+    -1px -1px 0 var(--primary-color), 1px -1px 0 var(--primary-color),
+    -1px 1px 0 var(--primary-color), 1px 1px 0 var(--primary-color),
+    0px -1px 0 var(--primary-color), 0px 1px 0 var(--primary-color),
+    -1px 0px 0 var(--primary-color), 1px 0px 0 var(--primary-color);
+}
+#gmdl-lyric-preview small { display: block; font-size: 12px; font-weight: 600; opacity: .75; margin-top: 4px; text-shadow: none; }
+html.lyr-small #gmdl-lyric-preview { font-size: 19px; }
+html.lyr-big #gmdl-lyric-preview { font-size: 31px; }
+html.lyr-glow #gmdl-lyric-preview { filter: drop-shadow(0 0 14px var(--primary-color)); }
+/* ---- APlayer precise dark (v8): bar body, expanded list, lrc masks ---- */
+html.dark .aplayer.aplayer-fixed .aplayer-body { background: #161d27; }
+html.dark.glass .aplayer.aplayer-fixed .aplayer-body {
+  background: rgba(20, 26, 38, 0.72);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+}
+html.dark .aplayer .aplayer-list { background: #161d27; border-color: #2a3444; }
+html.dark .aplayer .aplayer-info .aplayer-music .aplayer-title { color: var(--text-main); }
+html.dark .aplayer .aplayer-info .aplayer-music .aplayer-author { color: var(--text-sub); }
+html.dark .aplayer .aplayer-info .aplayer-controller .aplayer-time { color: var(--text-sub); }
+html.dark .aplayer .aplayer-icon svg path { fill: #c9d4e3; }
+html.dark .aplayer .aplayer-list ol li { color: var(--text-main); border-color: #2a3444; }
+html.dark .aplayer .aplayer-list ol li .aplayer-list-index,
+html.dark .aplayer .aplayer-list ol li .aplayer-list-author { color: var(--text-sub); }
+html.dark .aplayer .aplayer-list ol li:hover { background: rgba(255, 255, 255, 0.06); }
+html.dark .aplayer .aplayer-list ol li.aplayer-list-light { background: rgba(255, 255, 255, 0.07); }
+html.dark .aplayer .aplayer-list ol li.aplayer-list-light .aplayer-list-cur { background-color: var(--primary-color) !important; }
+html.dark .aplayer .aplayer-miniswitcher { background: #2a3444; }
+html.dark .aplayer .aplayer-lrc:before { background: linear-gradient(180deg, #161d27 0, rgba(22, 29, 39, 0)); }
+html.dark .aplayer .aplayer-lrc:after { background: linear-gradient(180deg, rgba(22, 29, 39, 0) 0, rgba(22, 29, 39, 0.85)); }
+html.dark .aplayer .aplayer-lrc p { color: var(--text-sub); }
+html.dark .aplayer .aplayer-lrc p.aplayer-lrc-current { color: var(--primary-color); }
+html.dark .aplayer .aplayer-notice { color: var(--text-main); }
+/* lyric sizes must also override APlayer fixed line heights */
+html.lyr-small .aplayer .aplayer-lrc p { font-size: 13px; line-height: 18px !important; height: 18px !important; }
+html.lyr-big .aplayer .aplayer-lrc p { font-size: 19px; line-height: 26px !important; height: 26px !important; }
+html.lyr-big .aplayer .aplayer-lrc p.aplayer-lrc-current { min-height: 26px; }
+/* ---- selected / hover light states (v9) ---- */
+html.dark .source-checkbox:checked + .source-card { background: #0f2c22; border-color: var(--primary-color); }
+html.dark .source-checkbox:checked + .source-card .source-name { color: var(--primary-color); }
+html.dark .ctrl-btn.primary { background: #0f2c22; color: var(--primary-color); border-color: #14532d; }
+html.dark .ctrl-btn:hover { background: #1a2331; }
+html.dark .song-list-tool-action:hover { background: #0f2c22; border-color: var(--primary-color); color: var(--primary-color); }
+html.dark .btn-pill-switch:hover:not(:disabled) { background: #3a2b1a; }
+html.dark .song-list-tools-trigger:hover,
+html.dark .song-list-tools-trigger[aria-expanded="true"] { background: #0f2c22; }
+html.dark .sort-dir-btn { background: #1c2534; border-color: #2a3444; color: var(--primary-color); }
+html.dark .local-music-upload-button.is-folder:hover { background: #0f2c22; }
+html.dark .song-title-link:hover { color: var(--primary-color); }
+/* ---- download records / history modals (v11) ---- */
+html.dark .modal { background: var(--card-bg); color: var(--text-main); }
+html.dark .utility-modal { background: var(--card-bg); border-color: #2a3444; box-shadow: 0 24px 56px rgba(0, 0, 0, 0.5); }
+html.dark .utility-modal .modal-header { border-color: #2a3444; }
+html.dark .utility-modal .modal-header h3 { color: var(--text-main); }
+html.dark .utility-modal .modal-header h3 i { color: var(--primary-color); }
+html.dark .utility-modal .modal-close:hover { background: #3a1620; color: #fb7185; }
+html.dark .utility-modal-list, html.dark .download-records-list { background: var(--card-bg); border-color: #2a3444; }
+html.dark .utility-modal-count, html.dark .download-records-count { background: #0f2c22; border-color: #14532d; color: var(--primary-color); }
+html.dark .utility-modal-page-button { background: #0f2c22; border-color: #14532d; color: var(--primary-color); }
+html.dark .utility-modal-page-button:hover:not(:disabled) { border-color: var(--primary-color); background: #14352a; }
+html.dark .download-records-table th { background: #141b26; border-color: #2a3444; color: var(--text-sub); }
+html.dark .download-records-table td { border-color: #2a3444; color: var(--text-main); }
+html.dark .download-record-name { color: var(--text-main); }
+html.dark .download-record-artist, html.dark .download-record-time { color: var(--text-sub); }
+html.dark .download-record-source { background: #222d3d; color: var(--text-sub); }
+html.dark .download-record-status.is-success { background: #0f2c22; color: var(--primary-color); }
+html.dark .download-record-status.is-skipped { background: #3a2b1a; color: #fbbf24; }
+html.dark .download-record-status.is-failed { background: #3a1620; color: #fb7185; }
+html.dark .download-records-error { color: #fb7185; background: #2a1418; }
+html.dark .download-records-empty i { color: var(--text-sub); }
+/* ---- hide upstream logo (all modes) ---- */
+.search-box > h1 { display: none; }
