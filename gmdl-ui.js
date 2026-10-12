@@ -52,6 +52,219 @@
   var S = load();
   function bgImg() { try { return localStorage.getItem(BGIMG_KEY) || ''; } catch (e) { return ''; } }
 
+  var CANONICAL_KEYS = ['theme', 'accent', 'bg', 'style', 'text', 'lyric', 'glow', 'blur', 'glass'];
+  var IMPORT_ERR_MSG = '导入失败：配置代码格式不正确或已损坏';
+  var IMPORT_OK_MSG = '导入成功：已应用主题配置';
+  var EXPORT_NOTICE_MSG = '注：仅导出主题与外观偏好，自定义背景图保存在当前设备，不随代码导出。';
+
+  function attr(node, k, v) {
+    if (node && typeof node.setAttribute === 'function') node.setAttribute(k, v);
+  }
+
+  function exportCode() {
+    var ordered = {
+      theme: S.theme,
+      accent: S.accent,
+      bg: S.bg,
+      style: S.style,
+      text: S.text,
+      lyric: S.lyric,
+      glow: Boolean(S.glow),
+      blur: S.blur,
+      glass: S.glass
+    };
+    return 'GMDL1:' + JSON.stringify({ v: 1, settings: ordered });
+  }
+
+  function scanJsonNoDuplicateOrProtoKeys(str) {
+    var pos = 0;
+    var len = str.length;
+    function skipWs() {
+      while (pos < len) {
+        var code = str.charCodeAt(pos);
+        if (code === 0x20 || code === 0x09 || code === 0x0a || code === 0x0d) pos++;
+        else break;
+      }
+    }
+    function parseStr() {
+      if (str[pos] !== '"') return null;
+      pos++;
+      var out = '';
+      while (pos < len) {
+        var ch = str[pos++];
+        if (ch === '"') return out;
+        if (ch.charCodeAt(0) < 0x20) return null;
+        if (ch === '\\') {
+          if (pos >= len) return null;
+          var esc = str[pos++];
+          if (esc === '"' || esc === '\\' || esc === '/') out += esc;
+          else if (esc === 'b') out += '\b';
+          else if (esc === 'f') out += '\f';
+          else if (esc === 'n') out += '\n';
+          else if (esc === 'r') out += '\r';
+          else if (esc === 't') out += '\t';
+          else if (esc === 'u') {
+            var hex = str.slice(pos, pos + 4);
+            if (!/^[0-9a-fA-F]{4}$/.test(hex)) return null;
+            pos += 4;
+            out += String.fromCharCode(parseInt(hex, 16));
+          } else return null;
+        } else {
+          out += ch;
+        }
+      }
+      return null;
+    }
+    function scanVal() {
+      skipWs();
+      if (pos >= len) return false;
+      var c = str[pos];
+      if (c === '{') {
+        pos++;
+        skipWs();
+        var seen = Object.create(null);
+        if (pos < len && str[pos] === '}') { pos++; return true; }
+        while (pos < len) {
+          skipWs();
+          if (str[pos] !== '"') return false;
+          var key = parseStr();
+          if (key === null) return false;
+          if (key === '__proto__' || key === 'constructor' || key === 'prototype') return false;
+          if (seen[key] === true) return false;
+          seen[key] = true;
+          skipWs();
+          if (str[pos] !== ':') return false;
+          pos++;
+          if (!scanVal()) return false;
+          skipWs();
+          if (str[pos] === ',') { pos++; continue; }
+          if (str[pos] === '}') { pos++; return true; }
+          return false;
+        }
+        return false;
+      }
+      if (c === '[') {
+        pos++;
+        skipWs();
+        if (pos < len && str[pos] === ']') { pos++; return true; }
+        while (pos < len) {
+          if (!scanVal()) return false;
+          skipWs();
+          if (str[pos] === ',') { pos++; continue; }
+          if (str[pos] === ']') { pos++; return true; }
+          return false;
+        }
+        return false;
+      }
+      if (c === '"') return parseStr() !== null;
+      if (c === 't') {
+        if (str.slice(pos, pos + 4) === 'true') { pos += 4; return true; }
+        return false;
+      }
+      if (c === 'f') {
+        if (str.slice(pos, pos + 5) === 'false') { pos += 5; return true; }
+        return false;
+      }
+      if (c === 'n') {
+        if (str.slice(pos, pos + 4) === 'null') { pos += 4; return true; }
+        return false;
+      }
+      if (c === '-' || (c >= '0' && c <= '9')) {
+        var m = /^-(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?|^(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?/.exec(str.slice(pos));
+        if (!m) return false;
+        pos += m[0].length;
+        return true;
+      }
+      return false;
+    }
+    if (!scanVal()) return false;
+    skipWs();
+    return pos === len;
+  }
+
+  function setImportStatus(msg) {
+    if (importStatusEl) importStatusEl.textContent = msg;
+  }
+
+  function importCode(rawInput) {
+    if (typeof rawInput !== 'string' || rawInput.length <= 6 || rawInput.length > 1024 || rawInput.slice(0, 6) !== 'GMDL1:') {
+      setImportStatus(IMPORT_ERR_MSG);
+      return false;
+    }
+    var jsonPart = rawInput.slice(6);
+    if (!scanJsonNoDuplicateOrProtoKeys(jsonPart)) {
+      setImportStatus(IMPORT_ERR_MSG);
+      return false;
+    }
+    var parsed;
+    try {
+      parsed = JSON.parse(jsonPart);
+    } catch (e) {
+      setImportStatus(IMPORT_ERR_MSG);
+      return false;
+    }
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+      setImportStatus(IMPORT_ERR_MSG);
+      return false;
+    }
+    var envKeys = Object.keys(parsed);
+    if (
+      envKeys.length !== 2 ||
+      !Object.prototype.hasOwnProperty.call(parsed, 'v') ||
+      !Object.prototype.hasOwnProperty.call(parsed, 'settings') ||
+      parsed.v !== 1
+    ) {
+      setImportStatus(IMPORT_ERR_MSG);
+      return false;
+    }
+    var st = parsed.settings;
+    if (!st || typeof st !== 'object' || Array.isArray(st)) {
+      setImportStatus(IMPORT_ERR_MSG);
+      return false;
+    }
+    var stKeys = Object.keys(st);
+    if (stKeys.length !== 9) {
+      setImportStatus(IMPORT_ERR_MSG);
+      return false;
+    }
+    for (var i = 0; i < CANONICAL_KEYS.length; i++) {
+      if (!Object.prototype.hasOwnProperty.call(st, CANONICAL_KEYS[i])) {
+        setImportStatus(IMPORT_ERR_MSG);
+        return false;
+      }
+    }
+    if (['dark', 'light', 'auto'].indexOf(st.theme) < 0) { setImportStatus(IMPORT_ERR_MSG); return false; }
+    if (!Object.prototype.hasOwnProperty.call(ACCENTS, st.accent)) { setImportStatus(IMPORT_ERR_MSG); return false; }
+    if (!Object.prototype.hasOwnProperty.call(BGS, st.bg)) { setImportStatus(IMPORT_ERR_MSG); return false; }
+    if (['solid', 'glass'].indexOf(st.style) < 0) { setImportStatus(IMPORT_ERR_MSG); return false; }
+    if (!Object.prototype.hasOwnProperty.call(TEXTS, st.text)) { setImportStatus(IMPORT_ERR_MSG); return false; }
+    if (['s', 'm', 'big'].indexOf(st.lyric) < 0) { setImportStatus(IMPORT_ERR_MSG); return false; }
+    if (typeof st.glow !== 'boolean') { setImportStatus(IMPORT_ERR_MSG); return false; }
+    if (typeof st.blur !== 'number' || !isFinite(st.blur) || Math.floor(st.blur) !== st.blur || st.blur < 0 || st.blur > 24) {
+      setImportStatus(IMPORT_ERR_MSG);
+      return false;
+    }
+    if (typeof st.glass !== 'number' || !isFinite(st.glass) || Math.floor(st.glass) !== st.glass || st.glass < 0 || st.glass > 100) {
+      setImportStatus(IMPORT_ERR_MSG);
+      return false;
+    }
+    S = {
+      theme: st.theme,
+      accent: st.accent,
+      bg: st.bg,
+      style: st.style,
+      text: st.text,
+      lyric: st.lyric,
+      glow: st.glow,
+      blur: st.blur,
+      glass: st.glass
+    };
+    save(S);
+    apply();
+    setImportStatus(IMPORT_OK_MSG);
+    return true;
+  }
+
   function isDark() {
     if (S.theme === 'dark') return true;
     if (S.theme === 'light') return false;
@@ -64,7 +277,7 @@
   }
   function apply() {
     var dark = isDark();
-    var glass = dark && S.style === 'glass';
+    var glass = S.style === 'glass';
     var img = bgImg();
     var hasImg = dark && !!img;
     document.documentElement.classList.toggle('dark', dark);
@@ -110,8 +323,17 @@
     if (text !== undefined) e.textContent = text;
     return e;
   }
+  var uiBtn = null;
   var panel = null;
   var lastHasImg = null;
+  var blurRangeEl = null;
+  var blurValEl = null;
+  var glassRangeEl = null;
+  var glassValEl = null;
+  var exportInputEl = null;
+  var importInputEl = null;
+  var importStatusEl = null;
+
   function renderRows() {
     while (panel.firstChild) panel.removeChild(panel.firstChild);
     panel.appendChild(rowTheme());
@@ -125,6 +347,10 @@
     panel.appendChild(rowBlur());
     panel.appendChild(rowGlass());
     panel.appendChild(rowBgImg());
+    panel.appendChild(rowExport());
+    panel.appendChild(rowImport());
+    panel.appendChild(rowImportStatus());
+    panel.appendChild(rowExportNotice());
     var cssV = '';
     try {
       var lk = document.querySelector('link[href*="gmdl-dark.css"]');
@@ -137,13 +363,34 @@
     var btn = el('button', null, '⚙');
     btn.id = 'gmdl-ui-btn';
     btn.title = '个性化设置';
-    btn.onclick = function () { panel.hidden = !panel.hidden; };
+    attr(btn, 'aria-label', '个性化设置');
+    attr(btn, 'aria-controls', 'gmdl-ui-panel');
+    attr(btn, 'aria-expanded', 'false');
+    btn.onclick = function () {
+      panel.hidden = !panel.hidden;
+      attr(btn, 'aria-expanded', String(!panel.hidden));
+    };
+    uiBtn = btn;
     panel = el('div', null, null);
     panel.id = 'gmdl-ui-panel';
     panel.hidden = true;
+    attr(panel, 'role', 'region');
+    attr(panel, 'aria-label', '个性化外观设置');
+    lastHasImg = !!bgImg();
     renderRows();
     (document.body || document.documentElement).appendChild(btn);
     document.body.appendChild(panel);
+    if (document && typeof document.addEventListener === 'function') {
+      document.addEventListener('keydown', function (e) {
+        if (e && e.key === 'Escape' && panel && !panel.hidden) {
+          panel.hidden = true;
+          if (uiBtn) {
+            attr(uiBtn, 'aria-expanded', 'false');
+            if (typeof uiBtn.focus === 'function') uiBtn.focus();
+          }
+        }
+      });
+    }
     refreshPanel();
   }
   function rowTheme() {
@@ -268,6 +515,7 @@
     rg.value = String(S.blur);
     rg.style.width = '110px';
     rg.title = '背景图模糊程度';
+    attr(rg, 'aria-label', '背景模糊');
     var val = el('span', 'gmdl-ui-label', S.blur + 'px');
     val.style.minWidth = '36px';
     rg.oninput = function () {
@@ -275,6 +523,8 @@
       val.textContent = S.blur + 'px';
       save(S); apply();
     };
+    blurRangeEl = rg;
+    blurValEl = val;
     wrap.appendChild(rg);
     wrap.appendChild(val);
     row.appendChild(wrap);
@@ -289,6 +539,7 @@
     rg.value = String(S.glass);
     rg.style.width = '110px';
     rg.title = '毛玻璃模糊与不透明程度，调低可看清背景图';
+    attr(rg, 'aria-label', '玻璃强度');
     var val = el('span', 'gmdl-ui-label', S.glass + '%');
     val.style.minWidth = '40px';
     rg.oninput = function () {
@@ -296,6 +547,8 @@
       val.textContent = S.glass + '%';
       save(S); apply();
     };
+    glassRangeEl = rg;
+    glassValEl = val;
     wrap.appendChild(rg);
     wrap.appendChild(val);
     row.appendChild(wrap);
@@ -323,12 +576,71 @@
       var b = el('button', 'gmdl-ui-sw' + (S.bg === k ? ' on' : ''), null);
       b.title = BGS[k].label;
       b.style.background = BGS[k].base;
-      b.style.border = '1px solid #555';
+      b.style.border = '2px solid #555';
       b.onclick = function () { S.bg = k; save(S); apply(); };
       wrap.appendChild(b);
     });
     row.appendChild(wrap);
     return row;
+  }
+  function rowExport() {
+    var row = el('div', 'gmdl-ui-row', null);
+    row.appendChild(el('span', 'gmdl-ui-label', '导出配置'));
+    var wrap = el('div', 'gmdl-ui-seg', null);
+    var inp = document.createElement('input');
+    inp.type = 'text';
+    inp.id = 'gmdl-export-code';
+    inp.className = 'gmdl-ui-transfer';
+    inp.readOnly = true;
+    attr(inp, 'readonly', 'readonly');
+    attr(inp, 'aria-label', '导出配置代码');
+    inp.value = exportCode();
+    exportInputEl = inp;
+    var btn = el('button', 'gmdl-ui-segbtn gmdl-ui-transfer', '导出');
+    btn.id = 'gmdl-export-btn';
+    btn.type = 'button';
+    btn.onclick = function () {
+      var c = exportCode();
+      inp.value = c;
+      if (typeof inp.select === 'function') inp.select();
+    };
+    wrap.appendChild(inp);
+    wrap.appendChild(btn);
+    row.appendChild(wrap);
+    return row;
+  }
+  function rowImport() {
+    var row = el('div', 'gmdl-ui-row', null);
+    row.appendChild(el('span', 'gmdl-ui-label', '导入配置'));
+    var wrap = el('div', 'gmdl-ui-seg', null);
+    var inp = document.createElement('input');
+    inp.type = 'text';
+    inp.id = 'gmdl-import-code';
+    inp.className = 'gmdl-ui-transfer';
+    inp.placeholder = '粘贴 GMDL1:... 配置代码';
+    attr(inp, 'aria-label', '导入配置代码');
+    importInputEl = inp;
+    var btn = el('button', 'gmdl-ui-segbtn gmdl-ui-transfer', '应用');
+    btn.id = 'gmdl-import-btn';
+    btn.type = 'button';
+    btn.onclick = function () {
+      importCode(inp.value);
+    };
+    wrap.appendChild(inp);
+    wrap.appendChild(btn);
+    row.appendChild(wrap);
+    return row;
+  }
+  function rowImportStatus() {
+    var st = el('div', null, '');
+    st.id = 'gmdl-import-status';
+    attr(st, 'role', 'status');
+    attr(st, 'aria-live', 'polite');
+    importStatusEl = st;
+    return st;
+  }
+  function rowExportNotice() {
+    return el('div', 'gmdl-ui-notice', EXPORT_NOTICE_MSG);
   }
   function refreshPanel() {
     if (!panel) return;
@@ -349,6 +661,11 @@
       var cs = sws[1].querySelectorAll('.gmdl-ui-sw');
       for (var q = 0; q < cs.length; q++) cs[q].classList.toggle('on', S.bg === kb[q]);
     }
+    if (blurRangeEl) blurRangeEl.value = String(S.blur);
+    if (blurValEl) blurValEl.textContent = S.blur + 'px';
+    if (glassRangeEl) glassRangeEl.value = String(S.glass);
+    if (glassValEl) glassValEl.textContent = S.glass + '%';
+    if (exportInputEl) exportInputEl.value = exportCode();
   }
 
   try { localStorage.removeItem('gmdl-theme'); } catch (e) {}

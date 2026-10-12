@@ -1,0 +1,68 @@
+# Model Routing & Provider Availability Log
+<!-- Project: gmdl-theme-pack-agent · Branch: project/antigravity-overhaul -->
+<!-- Format: Timestamp (+08) | From → To | Reason / Trigger | Provenance | Status -->
+
+## 1. Routing Log
+
+| Timestamp (+08) | From → To | Reason / Trigger | Provenance | Status |
+|---|---|---|---|---|
+| 2026-10-13 00:18:40 +0800 | default → Claude Sonnet 4.6 | Selected in picker; verified 00:18:46 | app-verified | active |
+| 2026-10-13 01:51:13 +0800 | Claude Sonnet 4.6 → Claude Opus 4.6 | Alternate Claude after quota; picker selected, subsequent request blocked | app-verified | blocked |
+| 2026-10-13 01:53:18 +0800 | Claude Opus 4.6 → Gemini 3.8 Flash (Medium) | Claude alternatives blocked; fallback authorized; Gemini selected, verified 01:53:22 | app-verified | active |
+| 2026-10-13 02:07:13 +0800 | Gemini 3.8 Flash (Medium) (maintained) | App picker showed Gemini 3.8 Flash (Medium) selected and Notice icons on Claude Sonnet/Opus, without numeric quotas | app-verified | active |
+| 2026-10-13 04:13:56 +0800 | Gemini 3.8 Flash (Medium) (maintained) | App still showed Gemini selected while the Stage 7 response was stopped after a prolonged stall; coordinator completed the documentation audit directly. No model switch or fallback occurred. | app-verified | active |
+| 2026-10-13 04:27:30 +0800 | Gemini 3.8 Flash (Medium) (maintained) | Task 4 phase-boundary picker inspection: Gemini 3.8 Flash Medium remained selected; Claude Sonnet/Opus 4.6 still displayed Notice; no available Claude alternative was shown. No model switch or fallback occurred. | app-verified | active |
+| 2026-10-13 04:41:38 +0800 | Gemini 3.8 Flash (Medium) (maintained) | Task 4 GREEN phase started in Antigravity; app screen showed Gemini 3.8 Flash Medium active. No model switch or fallback occurred. | app-verified | active |
+| 2026-10-13 04:52:15 +0800 | Gemini 3.8 Flash (Medium) (maintained) | Coordinator-reported: first green pass reached 29/29, but authentic 320×568 click testing found a panel/launcher overlap; the same Gemini session was instructed to make a CSS-only remediation. Model remains Gemini; no switch or fallback. | coordinator-recorded from app session | remediated |
+| 2026-10-13 04:58:00 +0800 | Gemini 3.8 Flash (Medium) (maintained) | Task 4 independently accepted after 29/29 UI tests, 11 paired authentic screenshots, five viewport and keyboard browser audits. Task 5 local/mock phase is next; Gemini remains selected. No model switch or fallback. | coordinator-recorded | active |
+| 2026-10-13 05:10:00 +0800 | Gemini 3.8 Flash (Medium) (maintained) | Coordinator completed the isolated IA adapter/test implementation and verified 10/10 tests while Antigravity remained on Gemini for Task 5 harness remediation. No model switch occurred; IA code authored directly by coordinator, not attributed to Antigravity. Report-only hourly self-check schedule remains active and unchanged. | coordinator-recorded | active |
+
+### Owner-Reported Quota Observations (Separate Informational Record)
+- **Timestamp (+08):** 2026-10-13 02:05:00 +0800
+- **Provenance:** owner-reported (Not independently verified; Antigravity model picker displays status/notice icons without numeric quota percentages).
+- **Reported Detail:** Claude 0% / reset in ~2h51m; Gemini 98% in 5h / 100% weekly.
+
+---
+
+## 2. Current Model Operational State
+
+- **Current Active Model:** Gemini 3.8 Flash (Medium)
+- **Status:** Active; Stage 7 and Sub-task 3C Smoke Script passed. Task 4 red phase 3/26 and final green 29/29 plus smoke 8/0 are recorded; authentic visual and browser audits passed after a CSS-only remediation. The isolated IA branch passes its final 10/10 suite; that implementation was coordinator-authored while Gemini remained selected in Antigravity for Task 5. No model switch or fallback occurred. The report-only hourly self-check schedule remains active as previously coordinator-verified; no schedule change was made.
+- **Quota / Health:** Operating normally within session bounds.
+
+---
+
+## 3. Cadence & Schedule Status
+
+### Hourly Self-Check Schedule (Coordinator-Verified)
+- **Status:** Active
+- **Provenance:** coordinator-verified (Inherited coordinator context confirmed exact status from `manus-config schedule status`; an empty response `{}` in a subsequent subshell query is recognized as non-superseding).
+- **Execution Interval:** 3600 seconds (hourly).
+- **Expiration:** `2026-10-13 06:30 Asia/Taipei` (UTC+08).
+- **Operational Scope & Invariants:**
+  - Scheduled runs are strictly **report-only**.
+  - They report selected model, provider notices, and availability status.
+  - They **must never** switch the active model, send background execution tasks, modify repository files, or trigger fallback installations.
+  - No timer or cron schedule shall be created, edited, or extended by the assistant.
+
+### Task Start & Phase Boundary Inspection Checklist
+At every task start and major phase boundary, the coordinator performs the following verification:
+1. Inspect the model picker and provider notice status.
+2. If the current model remains available and sufficient, continue execution without switching.
+3. If a model switch occurs, record the transition immediately in this log with timestamp (+08), from→to, reason, and provenance (`app-verified` vs `user-reported`).
+
+### Community Free-Model Fallback Protocol
+- **Trigger Status:** **NOT TRIGGERED** (No fallback software or proxy installed).
+- **Trigger Condition:** Fallback is evaluated ONLY if Gemini 3.8 Flash becomes unavailable and Claude models remain quota-blocked.
+- **Repository Evaluation Sequence:**
+  1. First inspect the exact README and scripts of `delhiiitian/antigravity-free`.
+  2. If unsuitable or unavailable, inspect `999Toth999/free-antigravity`.
+- **Key & Security Guardrails:**
+  - Use ONLY official provider free-tier key sources (e.g., Google AI Studio official free tier).
+  - NEVER log, echo, commit, or leak API keys, tokens, or credentials in any log, file, or chat message.
+- **Operational Scope Limitation:**
+  - Community free-model fallback may be used ONLY for drafting, task decomposition, and routine implementation.
+  - Independent final review, release-readiness verification, and gate sign-off MUST wait for official Claude or Gemini 3.8 Flash availability.
+- **Log Requirement:** Record trigger/not-triggered status and any configuration setup or observed effect in this log.
+| 2026-10-13 04:59 +0800 | Gemini 3.8 Flash (Medium) (maintained) | Task 5 model-picker audit: Claude Sonnet 4.6 Thinking and Claude Opus 4.6 Thinking both show Notice; Gemini 3.7/3.6/3.1 show Leaving Soon; Gemini 3.8 Flash Medium remains selected. No model switch. Report-only hourly self-check schedule remains active and unchanged. | coordinator-observed in Antigravity | active |
+| 2026-10-13 05:15 +0800 | Gemini 3.8 Flash (Medium) (maintained) | Coordinator audit of the isolated IA adapter added TDD cases for stale asynchronous player results, credentialed Archive.org URLs, and path-segment traversal. Targeted red runs (8/2, 9/1) preceded scoped fixes; final 10/10 suite, syntax checks, and browser-global/stub-fetch audit passed. Gemini remains selected for Antigravity's separate Task 5 work; no model switch. Report-only hourly self-check schedule remains active and unchanged. | coordinator-recorded plus app-observed current selection | active |
