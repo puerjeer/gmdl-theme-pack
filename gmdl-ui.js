@@ -81,7 +81,7 @@
     var css = ':root{--primary-color:' + a.m + ';--primary-gradient:linear-gradient(135deg,' + a.b + ' 0%,' + a.d + ' 100%);--karaoke-progress:' + a.m + ';}\n' +
       (dark ? ':root{--text-main:' + tx.main + ';--text-sub:' + tx.sub + ';}\n' +
       'html.dark .source-name,html.dark .song-list-tool-field,html.dark .song-list-tools-heading{color:' + tx.sub + ';}\n' +
-      'html.dark .cookie-item select,html.dark .song-list-tool-field select,html.dark h2,html.dark h3{color:' + tx.main + ';}\n' : '');
+      'html.dark .cookie-item select,html.dark .song-list-tool-field select,html.dark h2,html.dark h3{color:' + tx.main + ';}\n' : '') +
       '.type-option:hover,.type-option input:checked+span,.source-collapse-btn:hover .source-title,.source-collapse-btn:hover .source-collapse-icon,.ctrl-btn:hover,.list-header .result-count .count{color:' + a.m + ';}\n' +
       '.type-option input{accent-color:' + a.m + ';}\n' +
       'input[type="text"]:focus,input[type="password"]:focus{border-color:' + a.m + ';box-shadow:0 0 0 4px ' + a.glow + ';}\n' +
